@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, SkipForward, RotateCcw, Sliders } from 'lucide-react';
+import { Play, Pause, SkipForward, RotateCcw, Sliders, Sparkles, BarChart2 } from 'lucide-react';
 
-export type SortingAlgorithmType = 'selection' | 'bulles' | 'insertion' | 'shell';
+export type SortingAlgorithmType = 'bulles' | 'selection' | 'insertion';
 
 interface SortStep {
   array: number[];
@@ -21,7 +21,7 @@ export const SortingVisualizer: React.FC = () => {
   const [history, setHistory] = useState<SortStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [speedMs, setSpeedMs] = useState<number>(600);
+  const [speedMs, setSpeedMs] = useState<number>(500);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Generate steps for Bubble Sort
@@ -83,8 +83,8 @@ export const SortingVisualizer: React.FC = () => {
           comparing: null,
           swapping: null,
           sortedIndices: Array.from({ length: n }, (_, k) => k),
-          description: 'Optimisation : Aucun échange effectué dans ce tour ! Le tableau est entièrement trié.',
-          derjaNote: 'العلامة (flag echange) قعدت Faux : التابلو ديجا مريقل، نقصو الـ boucle فيسع !',
+          description: 'Optimisation : Aucun échange effectué ! Le tableau est déjà trié.',
+          derjaNote: 'العلامة (flag echange) قعدت Faux : التابلو مريقل، نقصو الـ boucle فيسع !',
         });
         break;
       }
@@ -126,19 +126,11 @@ export const SortingVisualizer: React.FC = () => {
           comparing: [minIdx, j],
           swapping: null,
           sortedIndices: [...sorted],
-          description: `Recherche du minimum : Comparaison de T[${j}] (${arr[j]}) avec le minimum actuel T[${minIdx}] (${arr[minIdx]}).`,
+          description: `Recherche du minimum : Comparaison de T[${j}] (${arr[j]}) avec T[${minIdx}] (${arr[minIdx]}).`,
           derjaNote: `نفركسو على أصغر نومرو ما بين الكازة ${i} وآخر التابلو.`,
         });
         if (arr[j] < arr[minIdx]) {
           minIdx = j;
-          steps.push({
-            array: [...arr],
-            comparing: null,
-            swapping: null,
-            sortedIndices: [...sorted],
-            description: `Nouveau minimum trouvé à l'indice ${minIdx} (valeur = ${arr[minIdx]}).`,
-            derjaNote: `لقينا أصغر نومرو جديد في الكازة ${minIdx} !`,
-          });
         }
       }
 
@@ -182,22 +174,13 @@ export const SortingVisualizer: React.FC = () => {
       comparing: null,
       swapping: null,
       sortedIndices: [0],
-      description: 'Tri par Insertion : Le premier élément T[0] est considéré comme trivialement trié.',
+      description: 'Tri par Insertion : Le premier élément T[0] est considéré comme trié.',
       derjaNote: 'الكازة الأولى نعتبروها ديجا مفرزة كيما في لعبة الكارطة.',
     });
 
     for (let i = 1; i < n; i++) {
       const cle = arr[i];
       let j = i - 1;
-
-      steps.push({
-        array: [...arr],
-        comparing: [i, j],
-        swapping: null,
-        sortedIndices: Array.from({ length: i }, (_, k) => k),
-        description: `Prise de l'élément clé T[${i}] = ${cle} à insérer dans la partie triée.`,
-        derjaNote: `خدينا الرقم ${cle} وباش نلوجولو على بلاصتو الصحيحة بين الأرقام لي قبلو.`,
-      });
 
       while (j >= 0 && arr[j] > cle) {
         arr[j + 1] = arr[j];
@@ -217,7 +200,7 @@ export const SortingVisualizer: React.FC = () => {
         comparing: null,
         swapping: null,
         sortedIndices: Array.from({ length: i + 1 }, (_, k) => k),
-        description: `Insertion de la clé ${cle} à sa position correcte T[${j + 1}].`,
+        description: `Insertion de la clé ${cle} à la position T[${j + 1}].`,
         derjaNote: `حطينا ${cle} في بلاصتو المظبوطة !`,
       });
     }
@@ -234,7 +217,6 @@ export const SortingVisualizer: React.FC = () => {
     return steps;
   };
 
-  // Recompute steps when algorithm changes
   const resetToAlgorithm = (algo: SortingAlgorithmType) => {
     setIsPlaying(false);
     if (timerRef.current) clearInterval(timerRef.current);
@@ -242,7 +224,6 @@ export const SortingVisualizer: React.FC = () => {
     if (algo === 'bulles') st = generateBubbleSortSteps(INITIAL_ARRAY);
     else if (algo === 'selection') st = generateSelectionSortSteps(INITIAL_ARRAY);
     else if (algo === 'insertion') st = generateInsertionSortSteps(INITIAL_ARRAY);
-    else st = generateBubbleSortSteps(INITIAL_ARRAY); // fallback
     setHistory(st);
     setCurrentStepIndex(0);
   };
@@ -251,7 +232,6 @@ export const SortingVisualizer: React.FC = () => {
     resetToAlgorithm(algorithm);
   }, [algorithm]);
 
-  // Handle play / pause timer
   useEffect(() => {
     if (isPlaying) {
       timerRef.current = setInterval(() => {
@@ -283,142 +263,147 @@ export const SortingVisualizer: React.FC = () => {
   const maxValue = Math.max(...INITIAL_ARRAY, 100);
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-xl p-6 shadow-xl">
-      {/* Algorithm selector & controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b border-brand-border">
+    <div className="bg-gradient-to-b from-[#0F1B2F] to-[#0A1322] border border-cyan-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      {/* Background glow circle */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      {/* Header & Algorithm switcher */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-white/10">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-semibold text-brand-muted">Algorithme :</span>
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">الخوارزمية :</span>
           {(['bulles', 'selection', 'insertion'] as SortingAlgorithmType[]).map((algoKey) => (
             <button
               key={algoKey}
-              onClick={() => {
-                setAlgorithm(algoKey);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+              onClick={() => setAlgorithm(algoKey)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 algorithm === algoKey
-                  ? 'bg-brand-cyan text-brand-dark shadow-md shadow-brand-cyan/20'
-                  : 'bg-brand-card text-brand-text hover:bg-brand-elevated border border-brand-border'
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-lg shadow-cyan-400/30 scale-105'
+                  : 'bg-[#15233A] text-slate-300 hover:text-white border border-white/10'
               }`}
             >
-              {algoKey === 'bulles' && 'Tri à Bulles'}
-              {algoKey === 'selection' && 'Tri par Sélection'}
-              {algoKey === 'insertion' && 'Tri par Insertion'}
+              {algoKey === 'bulles' && 'Tri à Bulles (الفرز بالفقاعات)'}
+              {algoKey === 'selection' && 'Tri par Sélection (الفرز بالاختيار)'}
+              {algoKey === 'insertion' && 'Tri par Insertion (الفرز بالإدراج)'}
             </button>
           ))}
         </div>
 
-        {/* Speed slider */}
-        <div className="flex items-center gap-3 text-xs text-brand-muted">
-          <Sliders className="w-4 h-4 text-brand-cyan" />
-          <span>Vitesse :</span>
+        {/* Speed Slider */}
+        <div className="flex items-center gap-3 bg-[#0B1526] px-4 py-2 rounded-xl border border-white/10 text-xs text-slate-300 font-medium">
+          <Sliders className="w-4 h-4 text-cyan-400" />
+          <span>السرعة :</span>
           <input
             type="range"
             min="100"
-            max="1200"
+            max="1000"
             step="100"
             value={speedMs}
             onChange={(e) => setSpeedMs(Number(e.target.value))}
-            className="w-24 accent-brand-cyan cursor-pointer"
+            className="w-24 accent-cyan-400 cursor-pointer"
           />
-          <span className="font-mono text-brand-text">{speedMs}ms</span>
+          <span className="font-mono text-cyan-300 font-bold">{speedMs}ms</span>
         </div>
       </div>
 
-      {/* Array visualization bars */}
-      <div className="h-64 flex items-end justify-center gap-3 sm:gap-4 p-4 bg-brand-dark/60 rounded-xl border border-brand-border/60 mb-6 relative">
+      {/* Animated Array Bars Display */}
+      <div className="h-72 flex items-end justify-center gap-3 sm:gap-5 p-6 bg-[#070D18]/90 rounded-2xl border border-white/10 mb-8 relative shadow-inner">
         {currentStep.array.map((val, idx) => {
           const isComparing = currentStep.comparing && (currentStep.comparing[0] === idx || currentStep.comparing[1] === idx);
           const isSwapping = currentStep.swapping && (currentStep.swapping[0] === idx || currentStep.swapping[1] === idx);
           const isSorted = currentStep.sortedIndices.includes(idx);
 
-          let barBg = 'bg-brand-cyan/60 border-brand-cyan';
-          if (isComparing) barBg = 'bg-amber-400 border-amber-300 shadow-lg shadow-amber-400/40 animate-pulse';
-          if (isSwapping) barBg = 'bg-brand-rose border-rose-400 shadow-lg shadow-rose-500/40';
-          if (isSorted) barBg = 'bg-emerald-500/80 border-emerald-400';
+          let barBg = 'bg-gradient-to-t from-cyan-600/40 via-cyan-500/70 to-cyan-400 border-cyan-400/80 shadow-cyan-500/20';
+          if (isComparing) barBg = 'bg-gradient-to-t from-amber-600/80 via-amber-500 to-yellow-300 border-yellow-300 shadow-lg shadow-amber-400/50 animate-pulse';
+          if (isSwapping) barBg = 'bg-gradient-to-t from-rose-600 via-rose-500 to-pink-400 border-pink-400 shadow-xl shadow-rose-500/50 scale-105';
+          if (isSorted) barBg = 'bg-gradient-to-t from-emerald-600/80 via-emerald-500 to-teal-300 border-emerald-300 shadow-emerald-500/30';
 
-          const heightPercent = Math.max((val / maxValue) * 100, 15);
+          const heightPercent = Math.max((val / maxValue) * 100, 16);
 
           return (
-            <div key={idx} className="flex-1 max-w-[54px] flex flex-col items-center justify-end h-full">
-              <span className="text-xs font-mono font-bold text-brand-text mb-1">{val}</span>
+            <div key={idx} className="flex-1 max-w-[58px] flex flex-col items-center justify-end h-full transition-all duration-200">
+              <span className={`text-xs font-mono font-black mb-2 transition-colors ${
+                isComparing ? 'text-yellow-300 scale-125' : isSwapping ? 'text-pink-300 scale-125' : isSorted ? 'text-emerald-300' : 'text-slate-200'
+              }`}>
+                {val}
+              </span>
               <div
                 style={{ height: `${heightPercent}%` }}
-                className={`w-full rounded-t-md border-t border-x transition-all duration-200 ${barBg}`}
+                className={`w-full rounded-t-xl border-t-2 border-x transition-all duration-300 shadow-lg ${barBg}`}
               />
-              <div className="w-full text-center mt-2 pt-1 border-t border-brand-border/40">
-                <span className="text-[11px] font-mono text-brand-muted">[{idx}]</span>
+              <div className="w-full text-center mt-3 pt-1 border-t border-white/10">
+                <span className="text-[11px] font-mono font-bold text-slate-400">T[{idx}]</span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-brand-muted mb-6">
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-brand-cyan/60 border border-brand-cyan" />
-          <span>Non trié</span>
+      {/* Modern Legend */}
+      <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-300 mb-8 font-medium">
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-to-t from-cyan-600 to-cyan-400 border border-cyan-300 shadow-sm" />
+          <span>في الانتظار (Non trié)</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-amber-400 border border-amber-300" />
-          <span>En comparaison</span>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-to-t from-amber-500 to-yellow-300 border border-yellow-200 shadow-sm shadow-amber-400/50" />
+          <span>مقارنة مباشرة (Comparaison)</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-brand-rose border border-rose-400" />
-          <span>Échange / Déplacement</span>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-to-t from-rose-500 to-pink-400 border border-pink-300 shadow-sm shadow-rose-500/50" />
+          <span>تبديل في البلايص (Permutation)</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-sm bg-emerald-500/80 border border-emerald-400" />
-          <span>Fixé / Trié</span>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-to-t from-emerald-500 to-teal-300 border border-emerald-300 shadow-sm" />
+          <span>في بلاصتو الصحيحة (Trié)</span>
         </div>
       </div>
 
-      {/* Step explanation banner */}
-      <div className="bg-brand-card border border-brand-border rounded-lg p-4 mb-6">
+      {/* Step Explanation Card */}
+      <div className="bg-[#0C1628] border border-white/10 rounded-2xl p-5 mb-8 shadow-xl">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">
-            Étape {currentStepIndex + 1} / {history.length}
+          <span className="text-xs font-black uppercase tracking-wider text-cyan-400">
+            الخطوة {currentStepIndex + 1} من {history.length}
           </span>
         </div>
-        <p className="text-sm text-brand-text font-medium mb-2">{currentStep.description}</p>
+        <p className="text-sm text-slate-100 font-semibold mb-3">{currentStep.description}</p>
         {currentStep.derjaNote && (
-          <div className="bg-brand-amber/10 border border-brand-amber/30 rounded-md p-2.5 flex items-start gap-2">
-            <span className="text-xs font-bold text-brand-amber px-1.5 py-0.5 rounded bg-brand-amber/20 shrink-0">
-              بالتونسي
+          <div className="bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 rounded-xl p-3.5 flex items-start gap-3">
+            <span className="text-xs font-black text-amber-300 px-2 py-0.5 rounded-md bg-amber-500/20 shrink-0">
+              بالتونسي 💡
             </span>
-            <p className="text-xs text-amber-200/90 leading-relaxed text-right dir-rtl w-full">
+            <p className="text-xs sm:text-sm text-amber-100 leading-relaxed text-right dir-rtl w-full font-medium">
               {currentStep.derjaNote}
             </p>
           </div>
         )}
       </div>
 
-      {/* Player controls */}
-      <div className="flex items-center justify-center gap-3">
+      {/* Controller Buttons */}
+      <div className="flex items-center justify-center gap-4">
         <button
           onClick={() => {
             setIsPlaying(false);
             setCurrentStepIndex(0);
           }}
-          className="p-2.5 rounded-lg bg-brand-card hover:bg-brand-elevated text-brand-text border border-brand-border transition-colors"
-          title="Réinitialiser"
+          className="p-3.5 rounded-2xl bg-[#14233C] hover:bg-[#1A2E4F] text-slate-200 border border-white/10 transition-colors shadow-md"
+          title="إعادة من البداية"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
 
         <button
           onClick={() => setIsPlaying(!isPlaying)}
-          className="px-5 py-2.5 rounded-lg bg-brand-cyan hover:bg-brand-cyanHover text-brand-dark font-semibold flex items-center gap-2 shadow-lg shadow-brand-cyan/20 transition-all"
+          className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black text-sm flex items-center gap-2.5 shadow-xl shadow-cyan-500/30 transition-all hover:scale-105"
         >
           {isPlaying ? (
             <>
-              <Pause className="w-4 h-4" />
-              <span>Pause</span>
+              <Pause className="w-4 h-4 fill-slate-950" />
+              <span>إيقاف مؤقت</span>
             </>
           ) : (
             <>
-              <Play className="w-4 h-4" />
-              <span>Animer</span>
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>تشغيل المحاكاة</span>
             </>
           )}
         </button>
@@ -429,8 +414,8 @@ export const SortingVisualizer: React.FC = () => {
             setCurrentStepIndex((prev) => Math.min(prev + 1, history.length - 1));
           }}
           disabled={currentStepIndex >= history.length - 1}
-          className="p-2.5 rounded-lg bg-brand-card hover:bg-brand-elevated text-brand-text border border-brand-border disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          title="Étape suivante"
+          className="p-3.5 rounded-2xl bg-[#14233C] hover:bg-[#1A2E4F] text-slate-200 border border-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-md"
+          title="الخطوة التالية"
         >
           <SkipForward className="w-4 h-4" />
         </button>

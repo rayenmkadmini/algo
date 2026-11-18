@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Code2, 
@@ -12,317 +14,451 @@ import {
   Cpu, 
   GitBranch, 
   BookOpen, 
-  Database,
-  BarChart3
+  Flame,
+  Zap,
+  Award,
+  ChevronRight,
+  CheckCircle2,
+  XCircle,
+  HelpCircle,
+  Play
 } from 'lucide-react';
 import { modulesData, lessonsData } from '@/content/curriculum';
 import { exercisesData } from '@/content/exercises';
 import { examsData } from '@/content/exams';
 
 export default function HomePage() {
+  // Interactive Challenge Express Widget state
+  const [selectedChallengeOption, setSelectedChallengeOption] = useState<number | null>(null);
+  const [challengeSubmitted, setChallengeSubmitted] = useState<boolean>(false);
+
+  // Quick challenge question
+  const challengeQuestion = {
+    title: "⚡ Défi Express Bac du Jour :",
+    question: "Dans un Tri à Bulles optimisé, quand est-ce que l'algorithme s'arrête prématurément ?",
+    options: [
+      { text: "Dès que le premier élément T[0] est le minimum.", correct: false, explain: "Non, T[0] ne garantit pas que le reste du tableau est trié." },
+      { text: "Quand un tour complet s'effectue sans AUCUNE permutation (echange = Faux).", correct: true, explain: "Exact ! Si aucun échange n'a eu lieu, le tableau est mathématiquement déjà dans l'ordre croissant !" },
+      { text: "Après exactement 2 passages dans la boucle Pour.", correct: false, explain: "Faux, le nombre de tours dépend du désordre initial." }
+    ]
+  };
+
+  const handleChallengeSelect = (idx: number) => {
+    setSelectedChallengeOption(idx);
+    setChallengeSubmitted(true);
+  };
+
   return (
-    <div className="space-y-24">
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-6 pb-12 lg:pt-12 lg:pb-16">
+    <div className="space-y-28">
+      {/* 1. HERO SECTION : HIGH-ENERGY & MOTIVATING */}
+      <section className="relative pt-6 pb-8 lg:pt-14 lg:pb-16 overflow-hidden">
+        {/* Glow ambient backgrounds */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-cyan-500/20 via-blue-500/15 to-purple-500/15 blur-[120px] rounded-full pointer-events-none -z-10" />
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column: Headlines & CTAs */}
+          {/* Left Hero Text */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Conforme au Programme Officiel Bac Informatique 2026–2027</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-bold shadow-lg shadow-cyan-500/10">
+              <Flame className="w-4 h-4 text-amber-400 fill-amber-400 animate-bounce" />
+              <span>الباك في الجيب : دورة 2026–2027</span>
+              <span className="w-1 h-1 rounded-full bg-cyan-400" />
+              <span className="text-slate-300 font-medium">Sciences de l&apos;Informatique</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-text leading-[1.15]">
-              Apprends à penser.{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-cyanHover">
-                Apprends à programmer.
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.12]">
+              افهم اللوجيك،{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400">
+                الكود يجي وحدو !
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-brand-muted leading-relaxed max-w-2xl">
-              Maîtrise l&apos;algorithmique et Python avec des cours illustrés, des exercices interactifs et une préparation adaptée au Baccalauréat Informatique tunisien.
+            <p className="text-base sm:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl">
+              ودّع الحفظ الأعمى ! تعلّم الألغوريتم و Python بطريقة تفاعلية وممتعة : دروس واضحة، محاكاة بصرية ثلاثية الأبعاد، وتمارين تدريبية مطابقة لامتحانات البكالوريا التونسية.
             </p>
 
-            {/* CTAs */}
+            {/* Main Action CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/courses"
-                className="px-6 py-3.5 rounded-xl bg-brand-cyan hover:bg-brand-cyanHover text-brand-dark font-bold text-sm flex items-center gap-2 shadow-xl shadow-brand-cyan/20 transition-all hover:scale-[1.02]"
+                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black text-sm flex items-center gap-2.5 shadow-xl shadow-cyan-500/25 transition-all duration-200 hover:scale-[1.03] hover:shadow-cyan-500/40"
               >
-                <span>Commencer à apprendre</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>ابدأ التعلّم توا (مجاناً)</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </Link>
               <Link
                 href="/visualizer"
-                className="px-6 py-3.5 rounded-xl bg-brand-card hover:bg-brand-elevated text-brand-text font-semibold text-sm border border-brand-border flex items-center gap-2 transition-all hover:border-brand-cyan/40"
+                className="px-6 py-4 rounded-2xl bg-[#101B2D]/80 hover:bg-[#16253E] text-white font-bold text-sm border border-white/10 hover:border-cyan-400/40 flex items-center gap-2.5 transition-all shadow-lg backdrop-blur-md"
               >
-                <Layers className="w-4 h-4 text-brand-cyan" />
-                <span>Simulateur d&apos;algorithmes</span>
+                <Layers className="w-4 h-4 text-cyan-400" />
+                <span>جرّب المحاكي البصري</span>
               </Link>
             </div>
 
-            {/* Educational Philosophy Tag */}
-            <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-brand-muted">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>Explications Français + Derja</span>
+            {/* Trust Pills */}
+            <div className="pt-4 flex flex-wrap items-center gap-5 text-xs text-slate-400 font-medium">
+              <div className="flex items-center gap-2 bg-white/[0.04] px-3 py-1.5 rounded-full border border-white/10">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>عربي تونسي + Français</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brand-cyan" />
-                <span>Zéro Dépendance IA (Corrigés 100% Vérifiés)</span>
+              <div className="flex items-center gap-2 bg-white/[0.04] px-3 py-1.5 rounded-full border border-white/10">
+                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                <span>مطابق لوزارة التربية 100%</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <span>Notation Officielle Algorithme & Python</span>
+              <div className="flex items-center gap-2 bg-white/[0.04] px-3 py-1.5 rounded-full border border-white/10">
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span>بدون تسجيل إجباري</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Code & Algo Comparison Card */}
-          <div className="lg:col-span-5">
-            <div className="relative rounded-2xl bg-brand-surface border border-brand-border shadow-2xl p-6 overflow-hidden">
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-brand-border text-xs">
+          {/* Right Hero: Interactive Challenge Express & Preview */}
+          <div className="lg:col-span-5 space-y-4">
+            {/* Interactive Express Quiz Box */}
+            <div className="relative rounded-3xl bg-gradient-to-b from-[#101D33]/90 to-[#0A1322]/90 border border-cyan-500/30 shadow-2xl p-6 backdrop-blur-xl">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                  <span className="w-3 h-3 rounded-full bg-cyan-400 animate-ping" />
+                  <span className="text-xs font-black uppercase tracking-wider text-cyan-300">
+                    تحدّي السرعة الذكي
+                  </span>
                 </div>
-                <span className="font-mono text-brand-cyan text-[11px]">Bac SI : Algorithme ⇄ Python</span>
+                <span className="text-[11px] font-mono text-amber-400 font-bold bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30">
+                  +20 نقطة
+                </span>
               </div>
 
-              {/* Algorithm Side */}
-              <div className="mb-4">
-                <span className="text-[10px] font-mono uppercase font-bold text-brand-muted block mb-1">
-                  1. Algorithmique (Syllabus officiel) :
-                </span>
-                <pre className="p-3 bg-brand-dark/90 rounded-lg font-mono text-[11px] text-brand-text leading-relaxed border border-brand-border/40 overflow-x-auto">
-{`Fonction Som_Diviseurs (x : entier) : entier
-Début
-    S ← 0
-    Pour i de 1 à x div 2 Faire
-        Si x mod i = 0 Alors
-            S ← S + i
-        FinSi
-    FinPour
-    Retourner S
-Fin`}
-                </pre>
+              <h3 className="text-sm font-bold text-white mb-4 leading-snug">
+                {challengeQuestion.question}
+              </h3>
+
+              <div className="space-y-2.5 mb-4">
+                {challengeQuestion.options.map((opt, i) => {
+                  const isSelected = selectedChallengeOption === i;
+                  let btnStyle = "bg-[#14233D]/70 border-white/10 hover:border-cyan-400/50 text-slate-200";
+                  if (challengeSubmitted) {
+                    if (opt.correct) btnStyle = "bg-emerald-500/20 border-emerald-400 text-emerald-200 font-bold";
+                    else if (isSelected) btnStyle = "bg-rose-500/20 border-rose-500 text-rose-200";
+                  } else if (isSelected) {
+                    btnStyle = "bg-cyan-500/20 border-cyan-400 text-cyan-200 font-bold";
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      disabled={challengeSubmitted}
+                      onClick={() => handleChallengeSelect(i)}
+                      className={`w-full text-left p-3 rounded-xl border text-xs leading-relaxed transition-all flex items-start gap-2.5 ${btnStyle}`}
+                    >
+                      <span className="font-mono font-bold text-cyan-400 shrink-0">[{String.fromCharCode(65 + i)}]</span>
+                      <span>{opt.text}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Python Side */}
-              <div className="mb-4">
-                <span className="text-[10px] font-mono uppercase font-bold text-brand-cyan block mb-1">
-                  2. Traduction Python conforme :
-                </span>
-                <pre className="p-3 bg-brand-dark/90 rounded-lg font-mono text-[11px] text-emerald-300 leading-relaxed border border-brand-border/40 overflow-x-auto">
-{`def som_diviseurs(x):
-    s = 0
-    for i in range(1, (x // 2) + 1):
-        if x % i == 0:
-            s += i
-    return s`}
-                </pre>
-              </div>
+              {challengeSubmitted && selectedChallengeOption !== null && (
+                <div className={`p-3.5 rounded-xl border text-xs leading-relaxed transition-all ${
+                  challengeQuestion.options[selectedChallengeOption].correct
+                    ? 'bg-emerald-500/15 border-emerald-400 text-emerald-300'
+                    : 'bg-rose-500/15 border-rose-400 text-rose-300'
+                }`}>
+                  <p className="font-bold mb-1">
+                    {challengeQuestion.options[selectedChallengeOption].correct ? '🎉 يعطيك الصحة ! إجابة صحيحة !' : '⚠️ مازالت فكرة صغيرة ناقصة :'}
+                  </p>
+                  <p>{challengeQuestion.options[selectedChallengeOption].explain}</p>
+                </div>
+              )}
 
-              {/* Derja Callout */}
-              <div className="bg-brand-amber/10 border border-brand-amber/30 rounded-lg p-2.5 flex items-start gap-2">
-                <span className="text-[10px] font-bold text-brand-amber px-1.5 py-0.5 rounded bg-brand-amber/20 shrink-0">
-                  تفسير
-                </span>
-                <p className="text-[11px] text-amber-200/90 leading-relaxed text-right dir-rtl w-full">
-                  الـ boucle تقف عند (x div 2) على خاطر مستحيل تلقى قاسم أكبر من شطر العدد إلا هو بيدو.
-                </p>
+              {/* Code comparison teaser */}
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+                <span>جرّب الكود مباشرة في الـ Playground :</span>
+                <Link href="/playground" className="text-cyan-400 hover:underline font-bold flex items-center gap-1">
+                  <span>فتح المحرر</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. STATS & CURRICULUM OVERVIEW */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-brand-surface border border-brand-border rounded-2xl shadow-lg">
-        <div className="p-4 border-r border-brand-border/40 last:border-0">
-          <span className="text-2xl sm:text-3xl font-extrabold text-brand-cyan font-mono block">
-            {modulesData.length} Modules
-          </span>
-          <span className="text-xs text-brand-muted">Du programme officiel Bac SI</span>
-        </div>
-        <div className="p-4 border-r border-brand-border/40 last:border-0">
-          <span className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono block">
-            {lessonsData.length}+ Leçons
-          </span>
-          <span className="text-xs text-brand-muted">Structurées & bilingues (FR + Derja)</span>
-        </div>
-        <div className="p-4 border-r border-brand-border/40 last:border-0">
-          <span className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono block">
-            {exercisesData.length}+ Exercices
-          </span>
-          <span className="text-xs text-brand-muted">QCM, complétion & débogage</span>
-        </div>
-        <div className="p-4">
-          <span className="text-2xl sm:text-3xl font-extrabold text-brand-text font-mono block">
-            {examsData.length} Épreuves
-          </span>
-          <span className="text-xs text-brand-muted">Sujets Bac officiels avec corrigés /20</span>
-        </div>
-      </section>
-
-      {/* 3. POURQUOI ALGO LAB ? */}
-      <section className="space-y-8">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold text-brand-text">
-            Pourquoi ALGO LAB fait la différence ?
-          </h2>
-          <p className="text-sm text-brand-muted">
-            L&apos;apprentissage de l&apos;algorithmique souffre souvent d&apos;abstractions difficiles à visualiser et d&apos;incompréhensions syntaxiques entre l&apos;algorithme papier et le code Python.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-brand-surface border border-brand-border rounded-xl p-6 hover:border-brand-cyan/40 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-brand-cyan/15 flex items-center justify-center text-brand-cyan mb-4">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-text mb-2">Comprendre la Logique Réelle</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Pas de mémorisation bête. Chaque algorithme est décomposé étape par étape avec la justification mathématique et algorithmique de chaque instruction.
-            </p>
-          </div>
-
-          <div className="bg-brand-surface border border-brand-border rounded-xl p-6 hover:border-brand-cyan/40 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-amber-400/15 flex items-center justify-center text-amber-400 mb-4">
-              <Layers className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-text mb-2">Visualisation Interactive</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Voyez les tableaux se trier, observez les indices i et j se déplacer et visualisez la pile d&apos;appels récursive monter et descendre en mémoire.
-            </p>
-          </div>
-
-          <div className="bg-brand-surface border border-brand-border rounded-xl p-6 hover:border-brand-cyan/40 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-emerald-400/15 flex items-center justify-center text-emerald-400 mb-4">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-brand-text mb-2">Conformité Bac Tunisie</h3>
-            <p className="text-xs text-brand-muted leading-relaxed">
-              Strict respect des conventions d&apos;inspection : tableaux de déclaration (TDO, TDOL, TDNT), passage par référence (@), et modules usuels exigés au Bac.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. MODULES DU PROGRAMME BAC SI */}
-      <section className="space-y-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* 2. THE 4 POWERFUL VISUALIZERS CAROUSEL / HIGHLIGHT */}
+      <section className="space-y-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-brand-text">
-              Modules d&apos;Algorithmique & Python
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-400 mb-2">
+              <Layers className="w-4 h-4" />
+              <span>تعلّم بعينيك قبل ماتكتب</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              المحاكيات التفاعلية : شوف الكود كيفاش يخدم في الميموار
             </h2>
-            <p className="text-sm text-brand-muted">
-              Explorez le tronc commun officiel de la 4ème année Sciences de l&apos;Informatique.
-            </p>
           </div>
           <Link
-            href="/courses"
-            className="text-xs font-semibold text-brand-cyan hover:underline flex items-center gap-1"
+            href="/visualizer"
+            className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 bg-cyan-500/10 px-3.5 py-2 rounded-xl border border-cyan-500/20 transition-colors"
           >
-            <span>Voir tous les modules</span>
+            <span>دخول للمخبر البصري</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* 1. Sorting Visualizer */}
+          <Link
+            href="/visualizer"
+            className="group relative rounded-2xl bg-gradient-to-b from-[#101D33] to-[#0A1322] border border-white/10 hover:border-cyan-400/50 p-6 flex flex-col justify-between shadow-xl transition-all duration-200 hover:-translate-y-1"
+          >
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400/20 to-blue-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+                1. خوارزميات الفرز (Tri)
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                شوف الـ Tri à bulles و Tri sélection خطوة بخطوة، بالتبديل والمقارنة والألوان الحية.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-cyan-400">
+              <span>جرّب الفرز</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </Link>
+
+          {/* 2. Array Visualizer */}
+          <Link
+            href="/visualizer"
+            className="group relative rounded-2xl bg-gradient-to-b from-[#101D33] to-[#0A1322] border border-white/10 hover:border-cyan-400/50 p-6 flex flex-col justify-between shadow-xl transition-all duration-200 hover:-translate-y-1"
+          >
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-teal-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 group-hover:scale-110 transition-transform">
+                <Cpu className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                2. ميموار التابلو (Tableaux 1D)
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                تتبّع الـ indices من 0 لـ n-1، كيفاش نعمروا الكازات وكيفاش نلوجوا بالـ Recherche Séquentielle.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-emerald-400">
+              <span>تتبّع التابلو</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </Link>
+
+          {/* 3. Recursion Visualizer */}
+          <Link
+            href="/visualizer"
+            className="group relative rounded-2xl bg-gradient-to-b from-[#101D33] to-[#0A1322] border border-white/10 hover:border-cyan-400/50 p-6 flex flex-col justify-between shadow-xl transition-all duration-200 hover:-translate-y-1"
+          >
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 group-hover:scale-110 transition-transform">
+                <Layers className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors">
+                3. كدس الركيرسيفيتي (Pile d&apos;Appels)
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                افهم الـ Débobinage وشرط الوقوف (Cas de base) في Factorielle و Fibonacci عيني عينك.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-amber-400">
+              <span>تفقد الـ Pile</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </Link>
+
+          {/* 4. Flowchart Visualizer */}
+          <Link
+            href="/visualizer"
+            className="group relative rounded-2xl bg-gradient-to-b from-[#101D33] to-[#0A1322] border border-white/10 hover:border-cyan-400/50 p-6 flex flex-col justify-between shadow-xl transition-all duration-200 hover:-translate-y-1"
+          >
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400/20 to-indigo-500/20 border border-purple-400/30 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform">
+                <GitBranch className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors">
+                4. الأورغانيغرام (Flowcharts)
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                تحويل الخوارزمية لشجرة منطقية مع جدول متابعة قيم المتغيرات (Trace d&apos;exécution).
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-purple-400">
+              <span>افتح المخطط</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* 3. ROADMAP TO 20/20 (PARCOURS DU BAC) */}
+      <section className="bg-gradient-to-r from-[#0D172A] via-[#101E36] to-[#0D172A] border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden">
+        <div className="max-w-3xl mb-8 space-y-2">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <Award className="w-4 h-4" />
+            <span>خطة النجاح والتميّز</span>
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            طريقك للـ 20/20 في الألغوريتم خطوة بخطوة
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            منهجية علمية واضحة ومجربة تخليك تدخل للامتحان وأنت واثق في روحك وفي كل سطر كود تكتبو.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+          <div className="p-5 rounded-2xl bg-[#14233D]/60 border border-white/10 space-y-2">
+            <div className="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-black text-sm">1</div>
+            <h4 className="font-bold text-white text-sm">الفهم النظري (Comprendre)</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              تقرأ التعريف العلمي بالفرنسية وتفهم اللوجيك بالدارجة التونسية.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#14233D]/60 border border-white/10 space-y-2">
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm">2</div>
+            <h4 className="font-bold text-white text-sm">المحاكاة البصرية (Visualiser)</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              تشوف الخوارزمية تخدم قدامك وتثبت في الكازات اللي تتبدل.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#14233D]/60 border border-white/10 space-y-2">
+            <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm">3</div>
+            <h4 className="font-bold text-white text-sm">التطبيق العملي (Pratiquer)</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              تخدم تمارين QCM، تكمل الفونكسيونات، وتصلح الأخطاء في الكود.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#14233D]/60 border border-cyan-400/40 space-y-2 bg-gradient-to-b from-cyan-500/10 to-transparent">
+            <div className="w-8 h-8 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center font-black text-sm">4</div>
+            <h4 className="font-bold text-cyan-300 text-sm">محاكاة الباك (Maîtriser)</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              تعدي امتحانات كاملة بالكرونو والبكاريج /20 وتشوف التصليح النموذجي.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. MODULES CATALOG TEASER */}
+      <section className="space-y-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              محاور البرنامج الرسمي للباكالوريا
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              كل درس فيه التعريف، السنتاكس، المقارنة مع Python والأخطاء الشائعة اللي تطيّح النوتات.
+            </p>
+          </div>
+          <Link
+            href="/courses"
+            className="text-xs font-bold text-cyan-400 hover:underline flex items-center gap-1"
+          >
+            <span>عرض المحاور كاملة ({modulesData.length})</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {modulesData.slice(0, 6).map((m) => (
             <Link
               key={m.id}
               href={`/courses/${m.slug}`}
-              className="group bg-brand-surface border border-brand-border hover:border-brand-cyan/50 rounded-xl p-5 flex flex-col justify-between transition-all hover:scale-[1.01] shadow-md"
+              className="group rounded-2xl bg-[#0F1A2E]/80 border border-white/10 hover:border-cyan-400/50 p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 shadow-lg"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-elevated text-brand-cyan border border-brand-border">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold">
                     {m.verificationStatus}
                   </span>
-                  <span className="text-xs text-brand-muted font-mono">{m.durationHours}h estimées</span>
+                  <span className="text-xs text-slate-400 font-mono">{m.durationHours}h مقدرة</span>
                 </div>
-                <h3 className="text-base font-bold text-brand-text group-hover:text-brand-cyan transition-colors mb-2">
+                <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors mb-2">
                   {m.title}
                 </h3>
-                <p className="text-xs text-brand-muted leading-relaxed mb-4">
+                <p className="text-xs text-slate-400 leading-relaxed mb-4">
                   {m.description}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-brand-border/60 flex items-center justify-between text-xs font-semibold text-brand-cyan">
-                <span>{m.chaptersCount} chapitres</span>
-                <span className="group-hover:translate-x-1 transition-transform">Accéder →</span>
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-cyan-400">
+                <span>{m.chaptersCount} فصول رسمية</span>
+                <span className="group-hover:translate-x-1 transition-transform">دخول للدرس →</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* 5. VISUALISATEURS D'ALGORITHMES CTA */}
-      <section className="bg-gradient-to-r from-brand-surface to-brand-card border border-brand-border rounded-2xl p-8 lg:p-12 relative overflow-hidden shadow-2xl">
-        <div className="max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/15 text-brand-cyan text-xs font-bold">
-            <Layers className="w-3.5 h-3.5" />
-            <span>Moteur Visuel Interactif</span>
+      {/* 5. PLAYGROUND PYTHON & INTERACTION BANNER */}
+      <section className="rounded-3xl bg-gradient-to-r from-[#0C1525] via-[#101C31] to-[#0C1525] border border-cyan-500/20 p-8 lg:p-12 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="space-y-4 max-w-xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+            <Terminal className="w-3.5 h-3.5" />
+            <span>Playground Python : جرّب بيدك</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
-            Comprenez enfin ce qui se passe à l&apos;intérieur de la mémoire
+          <h2 className="text-2xl sm:text-3xl font-black text-white leading-snug">
+            اكتب الكود وجرّب النتيجة في المتصفح بلاش ما تنصب حتى شي في البيسي
           </h2>
-          <p className="text-sm text-brand-muted leading-relaxed">
-            Testez nos simulateurs pas à pas : tri à bulles optimisé, tri par sélection, tri par insertion, organigrammes (flowcharts) et empilement de la récursivité.
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            تمارين حية على الـ Numpy Arrays، الفونكسيونات، والـ Tris. مع كود جاهز وموديلات نموذجية لامتحانات البكالوريا السابقة.
           </p>
           <div className="pt-2">
             <Link
-              href="/visualizer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-cyan hover:bg-brand-cyanHover text-brand-dark font-bold text-sm shadow-lg shadow-brand-cyan/20 transition-all"
+              href="/playground"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs shadow-lg shadow-cyan-400/20 transition-all hover:scale-105"
             >
-              <span>Lancer les visualiseurs</span>
-              <ArrowRight className="w-4 h-4" />
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>افتح الـ Playground توا</span>
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* 6. CONSOLE PYTHON BAC CTA */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-brand-surface border border-brand-border rounded-2xl p-8">
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
-            <Terminal className="w-3.5 h-3.5" />
-            <span>Playground Sécurisé Sans Installation</span>
+        <div className="w-full lg:w-96 bg-[#070D18] rounded-2xl border border-white/10 p-4 font-mono text-xs shadow-2xl">
+          <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10 text-[11px] text-slate-400">
+            <span className="text-cyan-400 font-bold">test_somme_diviseurs.py</span>
+            <span className="text-emerald-400">● Python 3</span>
           </div>
-          <h2 className="text-2xl font-bold text-brand-text">
-            Pratiquez Python directement dans votre navigateur
-          </h2>
-          <p className="text-xs text-brand-muted leading-relaxed">
-            Exécutez les algorithmes du Bac sans quitter la plateforme. Testez la somme des diviseurs, les tableaux NumPy, les fonctions récursives et observez les sorties console en temps réel.
-          </p>
-          <Link
-            href="/playground"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-card hover:bg-brand-elevated text-brand-text border border-brand-border text-xs font-semibold hover:border-brand-cyan/40 transition-colors"
-          >
-            <span>Ouvrir le Playground</span>
-            <ArrowRight className="w-3.5 h-3.5 text-brand-cyan" />
-          </Link>
-        </div>
+          <pre className="text-emerald-300 leading-relaxed overflow-x-auto text-[11px]">
+{`def som_diviseurs(x):
+    s = 0
+    for i in range(1, (x // 2) + 1):
+        if x % i == 0:
+            s += i
+    return s
 
-        <div className="bg-brand-dark p-4 rounded-xl border border-brand-border font-mono text-xs text-brand-muted">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-brand-border/40 text-[11px]">
-            <span className="text-brand-cyan">test_bac.py</span>
-            <span className="text-emerald-400">● Bac Informatique</span>
-          </div>
-          <pre className="text-brand-text text-[11px] leading-relaxed overflow-x-auto">
-{`from numpy import array
-
-# Tri à bulles optimisé officiel Bac
-T = array([45, 12, 89, 34, 23])
-print("Tableau initial :", T)
-# Exécution pas à pas en console...`}
+# Test Bac
+print(som_diviseurs(6)) # -> 6`}
           </pre>
         </div>
       </section>
     </div>
+  );
+}
+
+function BarChart3(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 3v18h18" />
+      <path d="M18 17V9" />
+      <path d="M13 17V5" />
+      <path d="M8 17v-3" />
+    </svg>
   );
 }
