@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Code2, Heart, ExternalLink, ShieldCheck, Sparkles, Award } from 'lucide-react';
+import { Code2, Heart, ExternalLink, ShieldCheck, Sparkles, Award, Gift, GraduationCap } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -9,6 +9,35 @@ export const Footer: React.FC = () => {
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative">
+        {/* Dedicated Tribute Banner */}
+        <div className="mb-12 p-6 rounded-3xl bg-gradient-to-r from-amber-500/15 via-[#111F36] to-cyan-500/15 border border-amber-500/30 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4 text-right sm:text-left">
+            <div className="w-14 h-14 rounded-2xl bg-[#0B1527] border-2 border-amber-400/50 flex items-center justify-center shrink-0 shadow-lg">
+              <Gift className="w-7 h-7 text-amber-400 animate-bounce" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-400">
+                  إهداء خاص من القلب 🎁
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                <span className="text-xs text-cyan-300 font-bold">4SI 3</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white mt-0.5">
+                Cadeau pour mes amis du Lycée Mixte Tataouine
+              </h3>
+              <p className="text-xs text-slate-300 mt-1">
+                Développé avec fierté par <strong className="text-amber-300 font-bold">Rayen Megadmin</strong> pour les élèves de 4SI 3 et tous les bacheliers de Tunisie.
+              </p>
+            </div>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs font-bold text-slate-200">
+            <GraduationCap className="w-4 h-4 text-cyan-400" />
+            <span>نجاح الباك يجمعنا 2027 🎓</span>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand Col */}
           <div className="md:col-span-1 space-y-4">
@@ -108,14 +137,14 @@ export const Footer: React.FC = () => {
                 &quot;الباك خطوة ومرحلة، واللوجيك اللي باش تفهمو توا، باش يقعد سلاحك في لافاك والخدمة من بعد !&quot;
               </p>
               <p className="text-[11px] text-slate-400">
-                طاقم ALGO LAB وراء كل تلميذ يحب ينجح ويتفوّق بجدارة.
+                منصة مهداة من Rayen Megadmin إلى أصدقاء 4SI 3 بالمعهد المختلط تطاوين.
               </p>
             </div>
           </div>
         </div>
 
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© 2026–2027 ALGO LAB. المنصة التعليمية لعلوم الإعلامية بتونس.</p>
+          <p>© 2026–2027 ALGO LAB • Développé par Rayen Megadmin (4SI 3 Lycée Mixte Tataouine).</p>
           <div className="flex items-center gap-5">
             <Link href="/about" className="hover:text-white transition-colors">حول المنصة</Link>
             <Link href="/dashboard" className="hover:text-white transition-colors">مساحة التلميذ</Link>

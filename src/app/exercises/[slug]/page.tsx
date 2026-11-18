@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { exercisesData } from '@/content/exercises';
 import { ExerciseEngine } from '@/components/exercises/ExerciseEngine';
 import { ArrowLeft } from 'lucide-react';
@@ -12,6 +14,7 @@ interface Props {
 }
 
 export default function ExerciseDetailPage({ params }: Props) {
+  const router = useRouter();
   const exercise = exercisesData.find((e) => e.slug === params.slug);
 
   if (!exercise) {
@@ -38,9 +41,7 @@ export default function ExerciseDetailPage({ params }: Props) {
         onNext={
           nextExercise
             ? () => {
-                if (typeof window !== 'undefined') {
-                  window.location.href = `/exercises/${nextExercise.slug}`;
-                }
+                router.push(`/exercises/${nextExercise.slug}`);
               }
             : undefined
         }

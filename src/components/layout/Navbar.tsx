@@ -15,7 +15,8 @@ import {
   X,
   ShieldAlert,
   Flame,
-  Sparkles
+  Gift,
+  Heart
 } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -30,8 +31,12 @@ export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const openTributeModal = () => {
+    window.dispatchEvent(new CustomEvent('open-tribute-modal'));
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-[#060B14]/80 backdrop-blur-xl border-b border-white/10 transition-all">
+    <header className="sticky top-0 z-50 bg-[#060B14]/85 backdrop-blur-xl border-b border-white/10 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo with ambient glow */}
@@ -57,6 +62,17 @@ export const Navbar: React.FC = () => {
               </p>
             </div>
           </Link>
+
+          {/* Tribute button: 4SI 3 Lycée Mixte Tataouine */}
+          <button
+            onClick={openTributeModal}
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-indigo-500/10 border border-amber-500/30 text-amber-300 hover:text-white hover:border-amber-400 transition-all text-xs font-bold group shadow-sm"
+            title="Cadeau de Rayen Megadmin pour 4SI 3 Lycée Mixte Tataouine"
+          >
+            <Gift className="w-3.5 h-3.5 text-amber-400 group-hover:scale-125 transition-transform" />
+            <span>4SI 3 • Lycée Mixte Tataouine</span>
+            <Heart className="w-3 h-3 text-rose-400 fill-rose-400 ml-0.5 animate-pulse" />
+          </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1 bg-[#0B1524]/70 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
@@ -119,6 +135,20 @@ export const Navbar: React.FC = () => {
       {/* Mobile menu dropdown */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-[#0A1220]/95 border-b border-white/10 px-5 pt-3 pb-6 space-y-2 backdrop-blur-2xl">
+          <button
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              openTributeModal();
+            }}
+            className="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-cyan-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs"
+          >
+            <div className="flex items-center gap-2">
+              <Gift className="w-4 h-4 text-amber-400" />
+              <span>Cadeau pour 4SI 3 Lycée Mixte Tataouine</span>
+            </div>
+            <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
+          </button>
+
           {NAV_LINKS.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
